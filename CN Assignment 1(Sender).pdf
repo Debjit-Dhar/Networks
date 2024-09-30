@@ -1,17 +1,6 @@
 {
  "cells": [
   {
-   "cell_type": "code",
-   "execution_count": 11,
-   "id": "68e32006-f651-489f-ba71-b5251e07052f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import numpy as np\n",
-    "import time"
-   ]
-  },
-  {
    "cell_type": "markdown",
    "id": "16dd63dc-75c5-46ad-9a9e-301979a4caba",
    "metadata": {},
@@ -33,50 +22,8 @@
    ]
   },
   {
-   "cell_type": "markdown",
-   "id": "e7466a60-9d97-429e-be6f-7a930848dbf8",
-   "metadata": {},
-   "source": [
-    "# Insert Header and Trailer"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "19fbc84d-5fcd-4bb2-ae37-03033f231cad",
-   "metadata": {},
-   "source": [
-    "# Get the mac address by using  ipconfig /all in command prompt"
-   ]
-  },
-  {
    "cell_type": "code",
-   "execution_count": 14,
-   "id": "68e1084c-552f-4edd-ad8e-5bcf75834f6e",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def make_frame(data,divisor):\n",
-    "    source='6018952B925C'#'0000'*5+'0001'#000001\n",
-    "    dest='6018952B925C'#'0000'*5+'0010'#000010\n",
-    "    length='0000000000000001'#=0001\n",
-    "    frame_seq_no='00000001'#=01\n",
-    "    trailer=crc(data,divisor)\n",
-    "    header=source+dest+length+frame_seq_no\n",
-    "    frame=header+data+trailer\n",
-    "    return frame"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "1d4d62a5-219a-4c87-9dc0-83363b0ace6c",
-   "metadata": {},
-   "source": [
-    "# Calculate Checksum"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 2,
    "id": "5c023167-afa0-42f1-8df7-002bd94e57fd",
    "metadata": {},
    "outputs": [],
@@ -102,12 +49,12 @@
     "        clip_sum_bin='0'*(clip-len(clip_sum_bin))+clip_sum_bin\n",
     "    clip_sum_bin_complement = int(''.join('1' if bit == '0' else '0' for bit in clip_sum_bin),2)\n",
     "    decimal.append(clip_sum_bin_complement)\n",
-    "    return decimal#BOOM This is the checksum"
+    "    return decimal#BOOM This is the checksum\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 3,
    "id": "bbe1d5b0-5104-42f3-b94a-e4b0beaf1372",
    "metadata": {},
    "outputs": [
@@ -120,20 +67,12 @@
     }
    ],
    "source": [
-    "print(checksum('01111011110000000110',4))"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "cb16c9b0-6708-4c33-8c9c-e3e10b5a6cbf",
-   "metadata": {},
-   "source": [
-    "# Calculate CRC"
+    "print(checksum('01111011110000000110',4))\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 4,
    "id": "be9a7536-54e7-471a-bd86-c08f1a005d92",
    "metadata": {},
    "outputs": [],
@@ -150,12 +89,13 @@
     "                s[i + j] = str(int(s[i + j]) ^ int(divisor[j]))\n",
     "    remainder = ''.join(s[-(len(divisor) - 1):])\n",
     "    \n",
-    "    return remainder"
+    "    return remainder\n",
+    "    "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 5,
    "id": "4358bf7a-3a80-46f1-bcbe-0d8f297a9635",
    "metadata": {},
    "outputs": [
@@ -168,31 +108,12 @@
     }
    ],
    "source": [
-    "print(crc('1001','1011'))"
+    "print(crc('1001','1011'))\n"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "053a000c-3d86-4cc4-8157-4290333c1513",
-   "metadata": {},
-   "source": [
-    "# Insert Random Delay"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 12,
-   "id": "d1a91220-e401-43b1-9bd9-28a7a71043c1",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def cal_delay(max_delay):\n",
-    "    return np.random.randint(0,max_delay)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "6439e390-6198-415e-abe2-c99b390550e8",
+   "id": "c80ea567-c68e-4ce0-b136-90e182a9aead",
    "metadata": {},
    "source": [
     "# 0=>Single Bit, 1=>Two Isolated Single Bit, 2=>Odd number of errors, 3=> Burst Errors"
@@ -201,15 +122,15 @@
   {
    "cell_type": "code",
    "execution_count": 13,
-   "id": "00574a90-392b-483c-a698-5a468334e686",
+   "id": "db8af341-73b4-419f-b875-b9316f392196",
    "metadata": {},
    "outputs": [],
    "source": [
     "import numpy as np\n",
     "import time\n",
-    "def error_inject(s, etype=4):\n",
+    "def error_inject(s, etype=0):\n",
     "    np.random.seed(int(time.time()))\n",
-    "    #etype=np.random.randint(0, 8)changed\n",
+    "    etype=np.random.randint(0, 8)\n",
     "    print(etype)\n",
     "    esize=np.random.randint(0,len(s))\n",
     "    s = list(s)  \n",
@@ -245,9 +166,38 @@
     "            s[idx] = '1' if s[idx] == '0' else '0'\n",
     "    else:\n",
     "        pass\n",
-    "    s[3]='0'\n",
-    "    s[19]='1'\n",
-    "    return ''.join(s)  "
+    "    #s[3]='0'\n",
+    "    #s[19]='1'\n",
+    "    return ''.join(s)  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "10a39d5e-5d84-4e70-9361-a43f3d68c72c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "'01111011110001000010'"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "s_error = error_inject('01111011110000000110')\n",
+    "s_error\n"
    ]
   },
   {
@@ -261,19 +211,19 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 15,
    "id": "a7a5c2e7-04a0-49ad-a6d2-d686a0c67994",
    "metadata": {},
    "outputs": [],
    "source": [
     "import socket\n",
     "import time\n",
-    "import pickle"
+    "import pickle\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 16,
    "id": "ef925260-26eb-423e-92e1-3cfff08956e0",
    "metadata": {},
    "outputs": [],
@@ -296,12 +246,17 @@
     "        s.connect((host, port))\n",
     "        \n",
     "        # Send the serialized data\n",
-    "        s.sendall(serialized_data)"
+    "        s.sendall(serialized_data)\n",
+    "    ''' # Create a UDP socket object(For UDP Socket)\n",
+    "    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_socket:\n",
+    "        # Send the serialized data\n",
+    "        udp_socket.sendto(serialized_data, (host, port))'''\n",
+    "    "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 39,
+   "execution_count": 17,
    "id": "55047e0d-242e-4778-8893-89bd397dd2c7",
    "metadata": {},
    "outputs": [
@@ -316,7 +271,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "1\n"
+      "0\n"
      ]
     },
     {
@@ -332,9 +287,10 @@
     "    # Change these to your server's address and port\n",
     "    HOST = 'localhost'\n",
     "    PORT = 65432\n",
-    "    filename='C:/Users/sudip/PycharmProjects/pythonProject1/My Python Programs/DSA and OOPs and Machine Learning/bin_data.txt'\n",
+    "    filename='C:/Users/sudip/PycharmProjects/pythonProject1/My Python Programs/DSA and OOPs and Machine Learning/CN Assignments/bin_data.txt'\n",
     "    choice=int(input('Enter choice'))\n",
-    "    send_binary_string(filename,choice,HOST,PORT)"
+    "    send_binary_string(filename,choice,HOST,PORT)\n",
+    "    "
    ]
   },
   {
